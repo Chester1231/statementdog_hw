@@ -1,0 +1,42 @@
+AllCops:
+  DisabledByDefault: true
+  TargetRubyVersion: 3.0
+
+  Exclude:
+    - 'node_modules/**/*'
+    - 'tmp/**/*'
+    - 'vendor/**/*'
+    - '.git/**/*'
+    - 'bin/**/*'
+    - 'db/*.rb'
+
+#################### Style ################################
+
+Style/Sample:
+  Description: >-
+    Use `sample` instead of `shuffle.first`,
+    `shuffle.last`, and `shuffle[Fixnum]`.
+  Reference: 'https://github.com/JuanitoFatas/fast-ruby#arrayshufflefirst-vs-arraysample-code'
+  Enabled: true
+
+Style/StringLiterals:
+  Enabled: true
+  EnforcedStyle: single_quotes
+  ConsistentQuotesInMultiline: true
+
+Style/StringLiteralsInInterpolation:
+  Enabled: true
+  EnforcedStyle: single_quotes
+
+Style/FrozenStringLiteralComment:
+  Details: >-
+    Add `# frozen_string_literal: true` to the top of the file. Frozen string
+    literals will become the default in a future Ruby version, and we want to
+    make sure we're ready.
+  EnforcedStyle: always
+  SupportedStyles:
+    - always
+    - never
+  SafeAutoCorrect: true
+  Exclude:
+    - 'db/migrate/*'
