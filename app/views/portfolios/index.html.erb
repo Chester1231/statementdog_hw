@@ -1,0 +1,14 @@
+<%= link_to '點我建立新的追蹤清單', new_portfolio_path %>
+<br>
+
+<% if @portfolios.present? %>
+  <% @portfolios.each do |portfolio| %>
+    <div style="display:flex; align-items: center;">
+      <h2><%= portfolio.title %></h2>&nbsp;&nbsp;
+      <%= link_to '編輯清單名稱', edit_portfolio_path(portfolio) %>&nbsp;
+      <%= link_to '刪除', portfolio_path(portfolio), method: 'delete' %>
+    </div>
+  <% end %>
+<% else %>
+  <h2>你還沒有建立股票清單哦！</h2>
+<% end %>
