@@ -26,7 +26,7 @@ RSpec.describe PortfoliosController, type: :controller do
     context 'when user login' do
       login_user
 
-      it 'redirect_to #show page and create' do
+      it 'redirect_to #index page and create' do
         post :create, params: { portfolio: { title: '我的追蹤清單' } }
         expect(response).to redirect_to(portfolios_path)
         expect(response).to have_http_status(302)
@@ -87,7 +87,7 @@ RSpec.describe PortfoliosController, type: :controller do
       login_user
       let(:portfolio) { create(:portfolio, user_id: @user.id) }
 
-      it 'redirect_to #show page and update' do
+      it 'redirect_to #index page and update' do
         patch :update, params: { portfolio: { title: '更新我的追清清單'}, id: portfolio.id }
         expect(response).to redirect_to(portfolios_path)
         expect(response).to have_http_status(302)
@@ -109,7 +109,7 @@ RSpec.describe PortfoliosController, type: :controller do
       login_user
       let(:portfolio) { create(:portfolio, user_id: @user.id) }
 
-      it 'redirect_to #show page and destroy' do
+      it 'redirect_to #index page and destroy' do
         delete :destroy, params: { id: portfolio.id }
         expect(response).to redirect_to(portfolios_path)
         expect(response).to have_http_status(302)
