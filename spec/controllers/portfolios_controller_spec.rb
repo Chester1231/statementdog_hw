@@ -125,4 +125,19 @@ RSpec.describe PortfoliosController, type: :controller do
       end
     end
   end
+
+  describe 'post #reorder' do
+    context 'when user login' do
+      login_user
+      let!(:first_portfolio) { create(:portfolio, user_id: @user.id, row_order: -541081600) }
+      let!(:second_portfolio) { create(:portfolio, user_id: @user.id, row_order: -104610816) }
+
+      it 'redirect_to #index page and save! portfolio order' do
+        post :reorder, params: { id: second_portfolio.id, position: :up }
+        expect(response).to redirect_to(portfolios_path)
+        expect(response).to have_http_status(302)
+        expect(second_portfolio.reload.row_order).not_to eq -104610816
+      end
+    end
+  end
 end

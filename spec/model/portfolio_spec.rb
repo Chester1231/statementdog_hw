@@ -16,4 +16,24 @@ RSpec.describe Portfolio, type: :model do
 
   # generally relation not testing with rspec, but if wanted it can testing with shoulda-matchers
   # context 'destroys dependent portfolio_stocks'
+
+  describe 'row_order' do
+    context 'when position :up' do
+      let(:user) { create(:user) }
+      let!(:first_portfolio) { create(:portfolio, user: user, row_order: -541081600) }
+      let!(:second_portfolio) { create(:portfolio, user: user, row_order: -104610816) }
+
+      before { second_portfolio.update(row_order: -741081600) }
+      it { expect(user.portfolios.second.row_order_rank).to eq 0 }
+    end
+
+    context 'when position :down' do
+      let(:user) { create(:user) }
+      let!(:first_portfolio) { create(:portfolio, user: user, row_order: -104610816) }
+      let!(:second_portfolio) { create(:portfolio, user: user, row_order: -541081600) }
+
+      before { second_portfolio.update(row_order: 146110310) }
+      it { expect(user.portfolios.second.row_order_rank).to eq 1 }
+    end
+  end
 end
