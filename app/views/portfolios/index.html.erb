@@ -8,6 +8,16 @@
       <%= link_to '編輯清單名稱', edit_portfolio_path(portfolio) %>&nbsp;
       <%= link_to '刪除', portfolio_path(portfolio), method: 'delete' %>
     </div>
+    <ul>
+      <% portfolio.stocks.each do |stock| %>
+        <li>
+          <%= stock.ticker %>
+          <%= stock.company_name %>
+          <%= link_to '刪除', portfolio_stock_path(portfolio, stock.ticker), method: 'delete' %>
+        </li>
+      <% end %>
+    </ul>
+    <%= link_to '點我新增追蹤股', new_portfolio_stock_path(portfolio) %>
   <% end %>
 <% else %>
   <h2>你還沒有建立股票清單哦！</h2>

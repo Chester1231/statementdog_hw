@@ -10,13 +10,35 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_21_091342) do
+ActiveRecord::Schema.define(version: 2022_05_22_122635) do
+
+  create_table "portfolio_stocks", force: :cascade do |t|
+    t.integer "portfolio_id"
+    t.string "ticker"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["portfolio_id", "ticker"], name: "index_portfolio_stocks_on_portfolio_id_and_ticker", unique: true
+  end
 
   create_table "portfolios", force: :cascade do |t|
     t.integer "user_id"
     t.string "title"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "stocks", force: :cascade do |t|
+    t.string "ticker", limit: 20
+    t.string "market_type"
+    t.string "exchange_market"
+    t.string "company_name"
+    t.string "company_description"
+    t.datetime "deleted_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["deleted_at"], name: "index_stocks_on_deleted_at"
+    t.index ["market_type"], name: "index_stocks_on_market_type"
+    t.index ["ticker"], name: "index_stocks_on_ticker", unique: true
   end
 
   create_table "users", force: :cascade do |t|

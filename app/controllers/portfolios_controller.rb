@@ -4,7 +4,7 @@ class PortfoliosController < ApplicationController
   before_action :find_portfolio, only: [:edit, :update, :destroy]
 
   def index
-    @portfolios = user_portfolios
+    @portfolios = user_portfolios.includes(:stocks)
   end
 
   def new
