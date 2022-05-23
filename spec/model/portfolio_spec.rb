@@ -2,13 +2,18 @@
 require 'rails_helper'
 
 RSpec.describe Portfolio, type: :model do
-  context 'is valid with valid attributes' do
-    let(:portfolio) { create(:portfolio) }
-    it { expect(portfolio).to be_valid }
+  describe 'validation' do
+    context 'is valid with valid attributes' do
+      let(:portfolio) { create(:portfolio) }
+      it { expect(portfolio).to be_valid }
+    end
+
+    context 'is not valid without title' do
+      let(:invalid_portfolio) { build(:portfolio, title: nil) }
+      it { expect(invalid_portfolio).to be_invalid }
+    end
   end
 
-  context 'is not valid without title' do
-    let(:invalid_portfolio) { build(:portfolio, title: nil) }
-    it { expect(invalid_portfolio).to be_invalid }
-  end
+  # generally relation not testing with rspec, but if wanted it can testing with shoulda-matchers
+  # context 'destroys dependent portfolio_stocks'
 end
