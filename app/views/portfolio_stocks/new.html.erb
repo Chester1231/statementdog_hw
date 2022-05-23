@@ -1,0 +1,6 @@
+<h2>新增追蹤股於 <%= @portfolio.title %></h2>
+
+<%= form_for(@portfolio_stock) do |f| %>
+  <%= f.text_field :ticker, placeholder: '輸入股號', name: 'ticker' %>
+  <%= f.submit '新增追蹤股' %>
+<% end %>

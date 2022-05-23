@@ -9,7 +9,7 @@ FactoryBot.define do
     company_description { 'company_description' }
 
     trait :unavailable_stock do
-      deleted_at { Date.new(2021,01,01)}
+      deleted_at { Date.new(2021,01,01) }
     end
   end
 end
