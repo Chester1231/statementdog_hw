@@ -6,5 +6,9 @@ Rails.application.routes.draw do
 
   resources :portfolios do
     resources :stocks, controller: :portfolio_stocks, param: :ticker, only: [:new, :create, :destroy]
+
+    member do
+      post :reorder
+    end
   end
 end

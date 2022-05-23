@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_22_122635) do
+ActiveRecord::Schema.define(version: 2022_05_23_113322) do
 
   create_table "portfolio_stocks", force: :cascade do |t|
     t.integer "portfolio_id"
@@ -25,6 +25,8 @@ ActiveRecord::Schema.define(version: 2022_05_22_122635) do
     t.string "title"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "row_order"
+    t.index ["row_order"], name: "index_portfolios_on_row_order"
   end
 
   create_table "stocks", force: :cascade do |t|

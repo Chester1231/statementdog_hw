@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 class PortfoliosController < ApplicationController
   before_action :authenticate_user!
-  before_action :find_portfolio, only: [:edit, :update, :destroy]
+  before_action :find_portfolio, only: [:edit, :update, :destroy, :reorder]
 
   def index
-    @portfolios = user_portfolios.includes(:stocks)
+    @portfolios = user_portfolios.rank(:row_order).includes(:stocks)
   end
 
   def new
@@ -34,6 +34,13 @@ class PortfoliosController < ApplicationController
 
   def destroy
     @portfolio.destroy if @portfolio
+    redirect_to portfolios_path
+  end
+
+  def reorder
+    @portfolio.row_order_position = params[:position]
+    @portfolio.save!
+
     redirect_to portfolios_path
   end
 

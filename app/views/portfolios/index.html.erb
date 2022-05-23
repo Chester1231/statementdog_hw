@@ -2,11 +2,28 @@
 <br>
 
 <% if @portfolios.present? %>
-  <% @portfolios.each do |portfolio| %>
-    <div style="display:flex; align-items: center;">
-      <h2><%= portfolio.title %></h2>&nbsp;&nbsp;
-      <%= link_to '編輯清單名稱', edit_portfolio_path(portfolio) %>&nbsp;
-      <%= link_to '刪除', portfolio_path(portfolio), method: 'delete' %>
+  <% @portfolios.each_with_index do |portfolio, index| %>
+    <div style="display: flex;">
+      <div style="display: flex; align-items: center;">
+        <h2><%= portfolio.title %></h2>&nbsp;&nbsp;
+        &nbsp;
+        <%= link_to '編輯清單名稱', edit_portfolio_path(portfolio) %>
+        &nbsp;
+        <%= link_to '刪除', portfolio_path(portfolio), method: 'delete' %>
+      </div>
+
+      &nbsp;
+
+      <div style="display: flex; align-items: center;">
+        <% unless index == 0 %>
+          <%= link_to '上移', reorder_portfolio_path(portfolio, position: :up), method: :post %>
+          &nbsp;
+        <% end %>
+
+        <% unless index == (@portfolios.size - 1) %>
+          <%= link_to '下移', reorder_portfolio_path(portfolio, position: :down), method: :post %>
+        <% end %>
+      </div>
     </div>
     <ul>
       <% portfolio.stocks.each do |stock| %>
