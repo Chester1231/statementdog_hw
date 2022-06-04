@@ -1,5 +1,28 @@
 # README
 
+## Usage
+
+#### Install Dependecy
+
+```zsh
+$ bundle install
+```
+
+#### Prepare Database
+
+```zsh
+$ rails db:create
+$ rails db:migrate
+```
+
+#### Create stocks seed
+
+```zsh
+$ rails db:seed
+```
+
+---
+
 #### 當實作時遇到有多種做法的部分時，請針對該部分在 readme 文件中說明你為何選擇此種做法
 
 1. 常見將相同的邏輯透過繼承 or include concern 的方式來處理
