@@ -14,26 +14,16 @@ RSpec.describe Portfolio, type: :model do
     end
   end
 
+  describe '.ordered_by_row_order' do
+    let!(:first_portfolio) { create(:portfolio, row_order: 1) }
+    let!(:second_portfolio) { create(:portfolio, row_order: 3) }
+    let!(:third_portfolio) { create(:portfolio, row_order: 2) }
+
+    subject { described_class.ordered_by_row_order }
+
+    it { expect(subject).to eq [first_portfolio, third_portfolio ,second_portfolio] }
+  end
+
   # generally relation not testing with rspec, but if wanted it can testing with shoulda-matchers
   # context 'destroys dependent portfolio_stocks'
-
-  describe 'row_order' do
-    context 'when position :up' do
-      let(:user) { create(:user) }
-      let!(:first_portfolio) { create(:portfolio, user: user, row_order: -541081600) }
-      let!(:second_portfolio) { create(:portfolio, user: user, row_order: -104610816) }
-
-      before { second_portfolio.update(row_order: -741081600) }
-      it { expect(user.portfolios.second.row_order_rank).to eq 0 }
-    end
-
-    context 'when position :down' do
-      let(:user) { create(:user) }
-      let!(:first_portfolio) { create(:portfolio, user: user, row_order: -104610816) }
-      let!(:second_portfolio) { create(:portfolio, user: user, row_order: -541081600) }
-
-      before { second_portfolio.update(row_order: 146110310) }
-      it { expect(user.portfolios.second.row_order_rank).to eq 1 }
-    end
-  end
 end
