@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 require 'rails_helper'
-include ControllerMacros
+include UserMacros
 
 RSpec.describe PortfolioStocksController, type: :controller do
   describe 'post #create' do
@@ -49,7 +49,7 @@ RSpec.describe PortfolioStocksController, type: :controller do
 
       it 'redirect_to login page' do
         post :create, params: { ticker: stock.ticker, portfolio_id: portfolio.id }
-        expect(response).to redirect_to(new_user_session_path)
+        expect(response).to redirect_to(root_path)
       end
     end
   end
@@ -69,7 +69,7 @@ RSpec.describe PortfolioStocksController, type: :controller do
     context 'when user signup' do
       it 'redirect_to login page' do
         get :new, params: { portfolio_id: 1 }
-        expect(response).to redirect_to(new_user_session_path)
+        expect(response).to redirect_to(root_path)
       end
     end
   end
@@ -96,7 +96,7 @@ RSpec.describe PortfolioStocksController, type: :controller do
 
       it 'redirect_to login page' do
         delete :destroy, params: { ticker: stock.ticker, portfolio_id: portfolio.id }
-        expect(response).to redirect_to(new_user_session_path)
+        expect(response).to redirect_to(root_path)
       end
     end
   end

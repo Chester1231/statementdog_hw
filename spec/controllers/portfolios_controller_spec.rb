@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 require 'rails_helper'
-include ControllerMacros
+include UserMacros
 
 RSpec.describe PortfoliosController, type: :controller do
   describe 'get #index' do
@@ -17,7 +17,7 @@ RSpec.describe PortfoliosController, type: :controller do
     context 'when user signup' do
       it 'redirect_to login page' do
         get :index
-        expect(response).to redirect_to(new_user_session_path)
+        expect(response).to redirect_to(root_path)
       end
     end
   end
@@ -58,7 +58,7 @@ RSpec.describe PortfoliosController, type: :controller do
     context 'when user signup' do
       it 'redirect_to login page' do
         post :create
-        expect(response).to redirect_to(new_user_session_path)
+        expect(response).to redirect_to(root_path)
       end
     end
   end
@@ -77,7 +77,7 @@ RSpec.describe PortfoliosController, type: :controller do
     context 'when user signup' do
       it 'redirect_to login page' do
         get :new
-        expect(response).to redirect_to(new_user_session_path)
+        expect(response).to redirect_to(root_path)
       end
     end
   end
@@ -98,7 +98,7 @@ RSpec.describe PortfoliosController, type: :controller do
       let(:portfolio) { create(:portfolio) }
       it 'redirect_to login page' do
         get :edit, params: { id: portfolio.id }
-        expect(response).to redirect_to(new_user_session_path)
+        expect(response).to redirect_to(root_path)
       end
     end
   end
@@ -120,7 +120,7 @@ RSpec.describe PortfoliosController, type: :controller do
       let(:portfolio) { create(:portfolio) }
       it 'redirect_to login page' do
         patch :update, params: { portfolio: { title: '更新我的追清清單'}, id: portfolio.id }
-        expect(response).to redirect_to(new_user_session_path)
+        expect(response).to redirect_to(root_path)
       end
     end
   end
@@ -150,7 +150,7 @@ RSpec.describe PortfoliosController, type: :controller do
       let(:portfolio) { create(:portfolio) }
       it 'redirect_to login page' do
         delete :destroy, params: { id: portfolio.id }
-        expect(response).to redirect_to(new_user_session_path)
+        expect(response).to redirect_to(root_path)
       end
     end
   end

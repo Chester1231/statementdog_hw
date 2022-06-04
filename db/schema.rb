@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_04_100058) do
+ActiveRecord::Schema.define(version: 2022_06_04_100448) do
 
   create_table "portfolio_stocks", force: :cascade do |t|
     t.integer "portfolio_id"
@@ -41,6 +41,14 @@ ActiveRecord::Schema.define(version: 2022_06_04_100058) do
     t.index ["deleted_at"], name: "index_stocks_on_deleted_at"
     t.index ["market_type"], name: "index_stocks_on_market_type"
     t.index ["ticker"], name: "index_stocks_on_ticker", unique: true
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "password"
+    t.string "email"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
   end
 
 end
