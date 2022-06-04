@@ -2,9 +2,10 @@
 class PortfoliosController < ApplicationController
   before_action :authenticate_user!
   before_action :find_portfolio, only: [:edit, :update, :destroy, :reorder]
+  after_action :reorder_row_order, only: [:destroy]
 
   def index
-    @portfolios = user_portfolios.rank(:row_order).includes(:stocks)
+    @portfolios = user_portfolios.ordered_by_row_order.includes(:stocks)
   end
 
   def new
@@ -12,7 +13,9 @@ class PortfoliosController < ApplicationController
   end
 
   def create
+    row_orders = user_portfolios.ordered_by_row_order.pluck(:row_order)
     @portfolio = user_portfolios.new(portfolio_params)
+    @portfolio.row_order = row_orders.blank? ? 1 : row_orders.last + 1
 
     if @portfolio.save
       redirect_to portfolios_path
@@ -38,9 +41,19 @@ class PortfoliosController < ApplicationController
   end
 
   def reorder
-    @portfolio.row_order_position = params[:position]
-    @portfolio.save!
+    case params[:position]
+      when 'up'
+        ordered_porfolios = user_portfolios.find_by(row_order: @portfolio.row_order-1)
+        ordered_porfolios.row_order += 1
+        @portfolio.row_order -= 1
+      when 'down'
+        ordered_porfolios = user_portfolios.find_by(row_order: @portfolio.row_order+1)
+        ordered_porfolios.row_order -= 1
+        @portfolio.row_order += 1
+    end
 
+    ordered_porfolios.save!
+    @portfolio.save!
     redirect_to portfolios_path
   end
 
@@ -56,5 +69,12 @@ class PortfoliosController < ApplicationController
 
   def portfolio_params
     params.require(:portfolio).permit(:title)
+  end
+
+  def reorder_row_order
+    portfolios = user_portfolios.ordered_by_row_order.where('row_order > ?', @portfolio.row_order)
+    return if portfolios.blank?
+
+    portfolios.update_all('row_order = row_order - 1')
   end
 end

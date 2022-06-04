@@ -26,11 +26,32 @@ RSpec.describe PortfoliosController, type: :controller do
     context 'when user login' do
       login_user
 
-      it 'redirect_to #index page and create' do
-        post :create, params: { portfolio: { title: '我的追蹤清單' } }
-        expect(response).to redirect_to(portfolios_path)
-        expect(response).to have_http_status(302)
-        expect(@user.portfolios.first).to have_attributes(title: '我的追蹤清單')
+      context 'and portfolio is blank' do
+        it 'redirect_to #index' do
+          post :create, params: { portfolio: { title: '我的追蹤清單' } }
+          expect(response).to redirect_to(portfolios_path)
+          expect(response).to have_http_status(302)
+        end
+
+        it 'create portfolio row_order to 1' do
+          post :create, params: { portfolio: { title: '我的追蹤清單' } }
+          expect(@user.portfolios.first).to have_attributes(title: '我的追蹤清單', row_order: 1)
+        end
+      end
+
+      context 'and portfolio not blank' do
+        let!(:portfolio) { create(:portfolio, user_id: @user.id, row_order: 1) }
+
+        it 'redirect_to #index' do
+          post :create, params: { portfolio: { title: '我的追蹤清單' } }
+          expect(response).to redirect_to(portfolios_path)
+          expect(response).to have_http_status(302)
+        end
+
+        it 'create portfolio row_order increment' do
+          post :create, params: { portfolio: { title: '我的追蹤清單' } }
+          expect(@user.portfolios.last).to have_attributes(title: '我的追蹤清單', row_order: 2)
+        end
       end
     end
 
@@ -107,13 +128,21 @@ RSpec.describe PortfoliosController, type: :controller do
   describe 'delete #destroy' do
     context 'when user login' do
       login_user
-      let(:portfolio) { create(:portfolio, user_id: @user.id) }
+      let!(:first_portfolio) { create(:portfolio, user_id: @user.id, row_order: 1) }
+      let!(:second_portfolio) { create(:portfolio, user_id: @user.id, row_order: 3) }
+      let!(:third_portfolio) { create(:portfolio, user_id: @user.id, row_order: 2) }
 
       it 'redirect_to #index page and destroy' do
-        delete :destroy, params: { id: portfolio.id }
+        delete :destroy, params: { id: first_portfolio.id }
         expect(response).to redirect_to(portfolios_path)
         expect(response).to have_http_status(302)
-        expect(@user.portfolios.count).to be_zero
+        expect(@user.portfolios.count).to eq 2
+      end
+
+      it 'reorder row_order' do
+        delete :destroy, params: { id: first_portfolio.id }
+        expect(second_portfolio.reload.row_order).to eq 2
+        expect(third_portfolio.reload.row_order).to eq 1
       end
     end
 
@@ -129,14 +158,35 @@ RSpec.describe PortfoliosController, type: :controller do
   describe 'post #reorder' do
     context 'when user login' do
       login_user
-      let!(:first_portfolio) { create(:portfolio, user_id: @user.id, row_order: -541081600) }
-      let!(:second_portfolio) { create(:portfolio, user_id: @user.id, row_order: -104610816) }
+      let!(:first_portfolio) { create(:portfolio, user_id: @user.id, row_order: 1) }
+      let!(:second_portfolio) { create(:portfolio, user_id: @user.id, row_order: 2) }
 
-      it 'redirect_to #index page and save! portfolio order' do
-        post :reorder, params: { id: second_portfolio.id, position: :up }
-        expect(response).to redirect_to(portfolios_path)
-        expect(response).to have_http_status(302)
-        expect(second_portfolio.reload.row_order).not_to eq -104610816
+      context 'and position is up' do
+        it 'redirect_to #index page' do
+          post :reorder, params: { id: second_portfolio.id, position: :up }
+          expect(response).to redirect_to(portfolios_path)
+          expect(response).to have_http_status(302)
+        end
+
+        it 'reorder row_order postion' do
+          post :reorder, params: { id: second_portfolio.id, position: :up }
+          expect(first_portfolio.reload.row_order).to eq 2
+          expect(second_portfolio.reload.row_order).to eq 1
+        end
+      end
+
+      context 'and position is down' do
+        it 'redirect_to #index page' do
+          post :reorder, params: { id: first_portfolio.id, position: :down }
+          expect(response).to redirect_to(portfolios_path)
+          expect(response).to have_http_status(302)
+        end
+
+        it 'reorder row_order postion' do
+          post :reorder, params: { id: first_portfolio.id, position: :down }
+          expect(first_portfolio.reload.row_order).to eq 2
+          expect(second_portfolio.reload.row_order).to eq 1
+        end
       end
     end
   end
