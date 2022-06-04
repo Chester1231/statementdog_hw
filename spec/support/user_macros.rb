@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
-module ControllerMacros
+module UserMacros
   def login_user
     before(:each) do
-      @request.env['devise.mapping'] = Devise.mappings[:user]
       @user = create(:user)
-      sign_in @user
+      session[:user_token] = @user.id
     end
   end
 end
